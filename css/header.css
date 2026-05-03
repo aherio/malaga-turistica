@@ -1,0 +1,25 @@
+header{
+    padding: 10px;
+    text-align: center;
+    background-image: url("img/1.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+}
+
+header div {background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            color:white;
+            font-size:15px;
+            border-radius: 10px;
+
+           }
+
+header h2{  font-size: 40px;
+            margin:0 0 20px;
+
+            }
+
+header p{ margin: 0 0 10px;
+
+}
