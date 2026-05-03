@@ -10,3 +10,41 @@ body { margin: 0;
 img{ border-radius: 10px;
 }
 
+/* --- ESTILOS PARA MÓVIL --- */
+@media (max-width: 768px) {
+    /* 1. Menú de navegación (Torrox, Motril...) */
+    .navbar { /* Asegúrate de que esta sea la clase de tu barra verde */
+        display: flex;
+        flex-wrap: wrap; /* Permite que los nombres bajen si no caben */
+        justify-content: center;
+        height: auto; 
+        padding: 10px;
+    }
+
+    .navbar a {
+        font-size: 14px; /* Un poco más pequeño para que quepa mejor */
+        padding: 5px 10px;
+    }
+
+    /* 2. El Contenedor de las 3 columnas */
+    .row {
+        flex-direction: column !important; /* ¡ESTO ES LA CLAVE! Pone una debajo de otra */
+        padding: 10px;
+        gap: 20px;
+    }
+
+    /* 3. Hacer que cada bloque ocupe el 100% del ancho */
+    .sidebar-aventura, 
+    .main-carrusel, 
+    .sidebar-cultural-grande {
+        width: 100% !important;
+        min-width: 0 !important; /* Elimina cualquier bloqueo de ancho */
+        flex: none;
+    }
+
+    /* 4. Ajustar la imagen de Ronda */
+    .carousel-item img {
+        height: 200px; /* Reducimos la altura para que no ocupe toda la pantalla */
+        object-fit: cover;
+    }
+}
