@@ -29,7 +29,8 @@ img{ border-radius: 10px;
 
     /* 2. El Contenedor de las 3 columnas */
     .row {
-        flex-direction: column !important; /* ¡ESTO ES LA CLAVE! Pone una debajo de otra */
+        background-color: #CDA434;
+       flex-direction: column !important; /* ¡ESTO ES LA CLAVE! Pone una debajo de otra */
         padding: 10px;
         gap: 20px;
     }
