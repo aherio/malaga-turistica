@@ -113,21 +113,45 @@
     animation: fade 0.5s; /* Un efecto de suavizado opcional */
 }
 
-/* Estilo para los botones encima de la imagen */
 .prev, .next {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    padding: 10px;
+    transform: translateY(-50%); /* Centra verticalmente */
+    
+    /* El "Círculo" */
+    width: 45px;  /* Más grande para que sea fácil de tocar con el dedo */
+    height: 45px;
+    background-color: rgba(255, 255, 255, 0.4); /* Fondo blanco semitransparente */
+    border-radius: 50%; /* Lo hace redondo */
+    border: 2px solid white; /* Un borde blanco fino para que contraste */
+    
+    /* El "Puntero" */
+    color: #003d3d; /* El verde oscuro de tu web */
+    font-size: 24px; /* Flecha más grande y negrita */
+    font-weight: bold;
+    
+    /* Comportamiento */
     cursor: pointer;
-    z-index: 10;
+    z-index: 100; /* Asegura que esté por encima de todo */
+    display: flex; /* Centra la flecha dentro del círculo */
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease; /* Efecto suave al pasar el dedo */
 }
 
-.prev { left: 10px; }
-.next { right: 10px; }
+/* Posicionamiento */
+.prev {
+    left: 15px; /* Un poco de aire desde el borde */
+}
+
+.next {
+    right: 15px; /* Un poco de aire desde el borde */
+}
+
+/* Efecto visual al pasar el ratón (o pulsar) */
+.prev:hover, .next:hover {
+    background-color: rgba(255, 255, 255, 0.8); /* Se vuelve más sólido */
+}
 
 @keyframes fade {
     from { opacity: 0.4; }
