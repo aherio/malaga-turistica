@@ -67,7 +67,7 @@
     text-decoration: none;
     color: #333;
     border-bottom: 1px solid #eee;
-    background-color: #fff;
+    background-color: #fdfaf0; /* Un blanco con un toque crema */
 }
 
 .item-aventura:hover, .card-cultural:hover {
