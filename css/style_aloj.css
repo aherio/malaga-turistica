@@ -1,4 +1,25 @@
 /* =========================================
+   CONFIGURACIÓN GENERAL
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 100vh;
+    /* Fondo dorado claro/ocre para el cuerpo de la página */
+    background-color: #C0C0C0;
+
+}
+
+/* =========================================
    BLOQUES CON TONOS VERDE Y DORADO
    ========================================= */
 
@@ -158,19 +179,89 @@
 .flecha-izq { left: 0; border-radius: 0 5px 5px 0; }
 .flecha-der { right: 0; border-radius: 5px 0 0 5px; }
 
+.contenedor-galerias {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Crea dos columnas exactamente iguales al 50% */
+    gap: 30px;                       /* Separación perfecta entre las dos galerías */
+    width: 95%;                      /* Deja un margen a los lados de la pantalla */
+    margin: 30px auto;               /* Centra todo el bloque en la página */
+}
+
+/* 2. Cada sección individual (Contiene el botón y su carrusel) */
+.seccion-alquiler {
+    width: 100%;                     /* Ocupa el 100% de su columna correspondiente */
+    display: flex;
+    flex-direction: column;          /* El botón se queda ARRIBA y las fotos ABAJO */
+}
+
+/* 3. Diseño del botón azul individual con borde plata */
+.boton-navbar-individual {
+    background-color: #3b60e4;       /* Tu azul */
+    color: white;
+    text-align: center;
+    padding: 12px 20px;
+    font-weight: bold;
+    font-size: 16px;
+    border: 3px solid #D1D1D6;       /* Tu borde plata */
+    border-radius: 8px;              /* Esquinas suavizadas */
+    margin-bottom: 15px;             /* Separa el botón del carrusel */
+    width: 100%;                     /* Ocupa todo el ancho del carrusel */
+    box-sizing: border-box;          /* Evita que el borde ensanche el botón */
+}
+
+.boton-inicio {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;                   /* Espacio entre el icono de la casa y el texto */
+    background-color: #3b60e4;  /* Tu azul corporativo */
+    color: white;
+    text-decoration: none;      /* Quita el subrayado típico de los enlaces */
+    font-weight: bold;
+    font-size: 15px;
+    padding: 10px 20px;
+    border: 3px solid #D1D1D6;  /* Tu borde plata */
+    border-radius: 30px;        /* Forma de cápsula estilizada */
+    transition: all 0.3s ease;  /* Transición suave para el efecto hover */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Efecto visual cuando el usuario pasa el ratón por encima */
+.boton-inicio:hover {
+    background-color: #2a4ecb;  /* Un azul un poco más oscuro al apuntarlo */
+    border-color: #C0C0C0;      /* El plata clásico destaca un poco más */
+    transform: translateY(-1px); /* Pequeño efecto de elevación */
+}
+
+
+
+
+
+
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
     .contenedor-principal {
         flex-direction: column;
     }
-    .bloque-1 { font-size: 2rem; }
-   
-    .navbar {
-        flex-direction: column;  /* ¡Aquí ocurre la magia! Los cambia de fila a columna */
-        gap: 15px;               /* Separa los dos elementos verticalmente de forma limpia */
-        text-align: center;
-        padding: 12px;
+    
+     .contenedor-galerias {
+        grid-template-columns: 1fr;  /* En móviles pasa de 2 columnas a 1 sola */
+        gap: 40px;                   /* Separación vertical entre bloques */
+        width: 90%;
     }
+    .contenedor-inicio {
+        width: 90%;
+        justify-content: center; /* En móviles queda mucho más estético centrado */
+        margin-top: 10px;
+    }
+    
+    .boton-inicio {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+
+
+
 
 }
