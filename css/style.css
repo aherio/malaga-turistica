@@ -152,7 +152,106 @@
 .prev:hover, .next:hover {
     background-color: rgba(255, 255, 255, 0.8); /* Se vuelve más sólido */
 }
+/* --- VENTANA MODAL (FONDO OSCURECIDO) --- */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 9999; /* Siempre por encima de todo */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo negro translúcido */
+    align-items: center;
+    justify-content: center;
+}
 
+/* CONTENEDOR DEL FORMULARIO */
+.modal-content {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    position: relative;
+    animation: aparecer 0.3s ease-out;
+}
+
+@keyframes aparecer {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* BOTÓN CERRAR (X) */
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+}
+.close-modal:hover { color: #333; }
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 1.3rem;
+    border-bottom: 2px solid #4163e9; /* Tu azul corporativo */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* CAMPOS DEL FORMULARIO */
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.form-group.row {
+    flex-direction: row;
+    gap: 15px;
+}
+.form-group.row div { flex: 1; display: flex; flex-direction: column; }
+
+.form-group label {
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: #4163e9;
+    outline: none;
+}
+
+/* BOTÓN DE ENVIAR FORMULARIO */
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background-color: #4163e9; /* Tu azul */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btn-submit:hover { background-color: #2b4cc9; }
 @keyframes fade {
     from { opacity: 0.4; }
     to { opacity: 1; }
