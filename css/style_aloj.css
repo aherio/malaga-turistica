@@ -260,10 +260,12 @@ body {
         padding: 8px 16px;
     }
      
-    .bloque bloque-1 {
-        font-size: 22px !important;    /* Reducimos el tamaño para que quepa en una sola línea */
-        padding: 15px 10px !important; /* Le damos un respiro interno al bloque */
+    .bloque.bloque-1 {
+        font-size: 20px !important;    /* Lo achica para que quepa en la pantalla del móvil */
+        padding: 15px 10px !important; /* Le da un margen interno más compacto */
         text-align: center;
+        width: 100% !important;
+        box-sizing: border-box;
     }
 
     /* 2. LE DAMOS UN MARGEN SUPERIOR AL BOTÓN DE INICIO */
