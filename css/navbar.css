@@ -1,5 +1,14 @@
 .navbar{
-    background-color: var(--color-primary);
+    background-color: #0056b3;
+    width: 85%;
+    margin: 20px auto;
+    padding: 12px 20px;
+    
+    border: 3px solid #D1D1D6;  /* Un plata fino fijo que sí permite redondear */
+    border-radius: 50px;       /* Esquinas perfectamente redondas */
+    
+    /* Una sombra para darle ese toque premium y de relieve */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     display: flex;
     justify-content: center;
 
