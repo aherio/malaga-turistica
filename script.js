@@ -22,3 +22,25 @@ function changeSlide(direction) {
     // Añadimos la clase 'active' a la nueva imagen
     slides[currentSlide].classList.add('active');
 }
+// --- LÓGICA DE LA VENTANA MODAL DE CONTACTO ---
+const modal = document.getElementById('modal-contacto');
+const btnContacto = document.getElementById('btn-contacto');
+const btnCerrarModal = document.querySelector('.close-modal');
+
+// Abrir la ventana al hacer clic en CONTACTO
+btnContacto.addEventListener('click', (e) => {
+    e.preventDefault(); // Evita que la página salte
+    modal.style.display = 'flex';
+});
+
+// Cerrar la ventana al hacer clic en la (X)
+btnCerrarModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+// Cerrar la ventana si el cliente hace clic fuera del recuadro blanco
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
