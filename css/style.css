@@ -54,7 +54,7 @@
 /* --- ESTILOS INTERNOS REUTILIZABLES --- */
 
 .sidebar-header, .header-grande {
-    background-color: #003d3d;
+    background-color: #3b81eb;
     color: white;
     padding: 10px;
     text-align: center;
@@ -65,7 +65,7 @@
     align-items: center;
     padding: 10px;
     text-decoration: none;
-    color: #333;
+    color: #3b81eb;
     border-bottom: 1px solid #eee;
     background-color: #fdfaf0; /* Un blanco con un toque crema */
 }
@@ -89,7 +89,7 @@
 
 /* El bloque verde debajo del carrusel */
 .pueblo-info {
-    background-color: #003d3d;
+    background-color:#3b81eb;
     color: white;
     padding: 8px;
     text-align: center;
