@@ -8,7 +8,7 @@ header{
     
 }
 
-header div {background-color: rgba(0, 0, 0, 0.7);
+header div {background-color: hsl(228, 72%, 56%);
             padding: 10px;
             color:white;
             font-size:15px;
