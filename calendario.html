@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Disponibilidad - Apartamentos</title>
+    <link rel="stylesheet" href="css/calendario.css">
+</head>
+<body>
+
+    <div class="admin-panel">
+        <span id="admin-status">Modo: 👤 Cliente (Solo Lectura)</span>
+        <button id="btn-login">Acceso Admin</button>
+    </div>
+
+    <div class="calendars-wrapper">
+        
+        <div class="calendar-container" id="cal-apartamento1">
+            <h1 class="apartment-title">TORROX URB EL PEÑONCILLO</h1>
+            <div class="calendar-header">
+                <button class="prev-month">&#10094;</button>
+                <h2 class="month-year"></h2>
+                <button class="next-month">&#10095;</button>
+            </div>
+            <div class="weekdays">
+                <div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div>
+            </div>
+            <div class="calendar-days"></div>
+        </div>
+
+        <div class="calendar-container" id="cal-apartamento2">
+            <h1 class="apartment-title">RINCON DE LA VICTORIA</h1>
+            <div class="calendar-header">
+                <button class="prev-month">&#10094;</button>
+                <h2 class="month-year"></h2>
+                <button class="next-month">&#10095;</button>
+            </div>
+            <div class="weekdays">
+                <div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div>
+            </div>
+            <div class="calendar-days"></div>
+        </div>
+
+    </div>
+
+    <script src="calendario.js"></script>
+</body>
+</html>
