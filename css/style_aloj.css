@@ -259,7 +259,20 @@ body {
         font-size: 14px;
         padding: 8px 16px;
     }
+    header.bloque-1, 
+    .bloque-1,
+    header {
+        font-size: 22px !important;    /* Reducimos el tamaño para que quepa en una sola línea */
+        padding: 15px 10px !important; /* Le damos un respiro interno al bloque */
+        text-align: center;
+    }
 
+    /* 2. LE DAMOS UN MARGEN SUPERIOR AL BOTÓN DE INICIO */
+    /* Como el título ahora es más compacto, esto evita que se encimen */
+    .contenedor-inicio {
+        margin-top: 15px !important;
+        margin-bottom: 10px !important;
+    }
 
 
 
