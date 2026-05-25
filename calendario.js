@@ -1,6 +1,6 @@
 // --- VARIABLES GLOBALES DE ADMINISTRACIÓN (ACCESO ÚNICO) ---
 let esAdmin = false; 
-const CONTRASENA_SECRETA = "1234"; 
+const CONTRASENA_SECRETA = "1234"; // Contraseña de acceso
 
 const adminStatus = document.getElementById('admin-status');
 const btnLogin = document.getElementById('btn-login');
@@ -25,7 +25,7 @@ btnLogin.addEventListener('click', () => {
         adminStatus.style.color = "black";
     }
     
-    // Al cerrar o abrir sesión, repintamos sin perder nada porque ahora lee de la memoria local
+    // Al abrir o cerrar sesión, repintamos los calendarios
     listaCalendarios.forEach(instanciaCal => instanciaCal.renderCalendar());
 });
 
@@ -46,11 +46,10 @@ class Calendario {
             "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
         ];
 
-        // 💾 [NUEVO] INTENTAR CARGAR LAS FECHAS GUARDADAS DEL NAVEGADOR
-        // Si es la primera vez que se abre, usará las 'fechasPorDefecto'
+        // 💾 CARGAR LAS FECHAS GUARDADAS DEL NAVEGADOR (CORREGIDO)
         const datosGuardados = localStorage.getItem(`ocupadas_${this.containerId}`);
         if (datosGuardados) {
-            this.ocupadas = new Set(JSON.deserialize ? JSON.deserialize(datosGuardados) : JSON.parse(datosGuardados));
+            this.ocupadas = new Set(JSON.parse(datosGuardados));
         } else {
             this.ocupadas = new Set(fechasPorDefecto);
         }
@@ -75,9 +74,8 @@ class Calendario {
         return `${year}-${m}-${d}`;
     }
 
-    // 💾 [NUEVO] FUNCIÓN PARA GRABAR LOS CAMBIOS EN EL DISCO
+    // 💾 FUNCIÓN PARA GRABAR LOS CAMBIOS EN EL DISCO
     guardarEnMemoria() {
-        // Convertimos el Set a un Array normal para que se pueda transformar en texto JSON
         const arrayFechas = Array.from(this.ocupadas);
         localStorage.setItem(`ocupadas_${this.containerId}`, JSON.stringify(arrayFechas));
     }
@@ -127,9 +125,8 @@ class Calendario {
                     dayDiv.classList.remove('available');
                 }
 
-                // 💾 [NUEVO] Cada vez que el admin hace click, guardamos el estado actual
+                // Guardar el estado actual en LocalStorage
                 this.guardarEnMemoria();
-                console.log(`Guardado en ${this.containerId}.`);
             });
 
             this.calendarDaysContainer.appendChild(dayDiv);
@@ -138,7 +135,6 @@ class Calendario {
 }
 
 // --- CREACIÓN DE LAS INSTANCIAS ---
-// Estas fechas que pongo aquí solo saldrán la primerísima vez que abras la web si la memoria está vacía.
 const apartamentoPlaya = new Calendario('cal-apartamento1', ["2026-05-15", "2026-05-16"]);
 const apartamentoCentro = new Calendario('cal-apartamento2', ["2026-05-22", "2026-05-23"]);
 
