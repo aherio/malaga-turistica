@@ -160,7 +160,28 @@ body {
     cursor: default;
     background: transparent;
 }
+/* --- BOTÓN DE REGRESAR A LA WEB --- */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none; /* Quita el subrayado del enlace */
+    padding: 8px 16px;
+    border-radius: 15px; /* Redondeado igual que el botón Inicio de tu foto */
+    background-color: #4163e9; /* Tu azul corporativo */
+    color: white;
+    font-weight: bold;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: background-color 0.2s, transform 0.1s;
+}
 
+.btn-back:hover {
+    background-color: #2b4cc9; /* Azul más oscuro al pasar el ratón */
+}
+
+.btn-back:active {
+    transform: scale(0.98);
+}
 /* --- REGLAS RESPONSIVE (MÓVILES) --- */
 @media (max-width: 450px) {
     body {
@@ -186,5 +207,10 @@ body {
     .calendar-days div {
         padding: 10px 0;
         font-size: 0.85rem;
+    }
+    .btn-back, .admin-panel button {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
     }
 }
