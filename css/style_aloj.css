@@ -260,8 +260,7 @@ body {
         padding: 8px 16px;
     }
      
-    .bloque bloque-1,
-    header {
+    .bloque bloque-1 {
         font-size: 22px !important;    /* Reducimos el tamaño para que quepa en una sola línea */
         padding: 15px 10px !important; /* Le damos un respiro interno al bloque */
         text-align: center;
