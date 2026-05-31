@@ -163,7 +163,27 @@ body {
     background: linear-gradient(to top right, transparent 46%, #cc0000 49%, #cc0000 51%, transparent 54%) !important;
     pointer-events: none; /* Crucial: permite que el Admin pueda seguir haciendo click a través de la línea */
 }
+/* Día ocupado (Cliente y Admin) */
+.calendar-days div.busy {
+    background-color: #ffcccc !important;
+    color: #cc0000 !important;
+    text-decoration: line-through !important;
+    font-weight: bold;
+    position: relative;
+    border-radius: 4px;
+}
 
+/* Línea diagonal roja */
+.calendar-days div.busy::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top right, transparent 46%, #cc0000 49%, #cc0000 51%, transparent 54%) !important;
+    pointer-events: none; /* Permite hacer clic a través de la línea en modo admin */
+}
 /* ==========================================================================
    MÓDULO RESPONSIVE (MÓVILES Y PANTALLAS PEQUEÑAS)
    ========================================================================== */
