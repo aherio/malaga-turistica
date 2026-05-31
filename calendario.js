@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================================================
     // 4. CONTROL DEL MODO ADMINISTRADOR (LOGIN Y GUARDADO INTELIGENTE)
     // ==========================================================================
-  if (btnLogin) {
+    if (btnLogin) {
         btnLogin.addEventListener('click', () => {
             if (!esAdmin) {
                 const intento = prompt("Introduce la contraseña de administrador:");
@@ -209,3 +209,4 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
         });
     }
+}); // <--- ¡AQUÍ ESTÁ EL CIERRE QUE FALTABA Y HACÍA FALLAR TODO!
