@@ -1,0 +1,211 @@
+:root {
+    --blue-bg: #4169e1;       /* Azul real del fondo superior y las cabeceras */
+    --nav-blue: #0056b3;      /* Azul marino de la barra de navegación */
+    --light-grey: #e0e0e0;    /* Fondo gris claro general */
+    --card-light: #fdfbf7;    /* Fondo crema claro para el contenido */
+    --text-dark: #333333;
+    
+    /* Colores identificativos para las temporadas */
+    --temp-alta: #d9534f;     /* Rojo/Coral */
+    --temp-media: #f0ad4e;    /* Naranja/Amarillo */
+    --temp-baja: #5cb85c;     /* Verde */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--light-grey);
+    color: var(--text-dark);
+    padding-bottom: 50px;
+}
+
+/* --- CABECERA --- */
+.header-bg {
+    background-color: var(--blue-bg);
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.header-banner {
+    max-width: 800px;
+    height: 120px;
+    background-image: url('https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80');
+    background-size: cover;
+    background-position: center;
+    margin: 0 auto 20px auto;
+    border-radius: 15px;
+    border: 2px solid rgba(0,0,0,0.2);
+}
+
+.header-title {
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* --- BARRA DE NAVEGACIÓN --- */
+.nav-container {
+    max-width: 1000px;
+    margin: -25px auto 30px auto;
+    padding: 0 20px;
+}
+
+.navbar {
+    background-color: var(--nav-blue);
+    border-radius: 50px;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.navbar a.active {
+    text-decoration: underline;
+}
+.navbar a i {
+    margin-right: 5px; /* Separa el icono del texto "Inicio" */
+    font-size: 1.1rem; /* Ajusta el tamaño del icono si lo necesitas */
+    vertical-align: middle; /* Lo alinea perfectamente con el texto */
+}
+/* --- LAYOUT DE TEMPORADAS --- */
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Columna izquierda estrecha, derecha ancha */
+    gap: 25px;
+    align-items: start;
+}
+
+/* Paneles Estilo Original */
+.panel {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.panel-header {
+    background-color: var(--blue-bg);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.panel-body {
+    background-color: var(--card-light);
+    padding: 20px;
+}
+
+/* Bloques de Leyenda de Temporadas (Columna Izquierda) */
+.temporada-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.badge-temp {
+    padding: 15px;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.badge-alta { background-color: var(--temp-alta); }
+.badge-media { background-color: var(--temp-media); color: #333; }
+.badge-baja { background-color: var(--temp-baja); }
+
+.badge-temp span {
+    font-size: 0.85rem;
+    font-weight: normal;
+    opacity: 0.9;
+}
+
+/* Tabla de Precios (Columna Derecha) */
+.table-container {
+    overflow-x: auto;
+}
+
+.price-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    text-align: left;
+}
+
+.price-table th {
+    background-color: var(--nav-blue);
+    color: white;
+    padding: 14px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.price-table td {
+    padding: 16px 14px;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 0.95rem;
+}
+
+.price-table tr:hover {
+    background-color: #fcfbfa;
+}
+
+/* Estilización de las celdas de precio */
+.price-cell {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.price-alta { color: var(--temp-alta); }
+.price-media { color: #b87b00; } /* Tono oscuro para contraste sobre blanco */
+.price-baja { color: var(--temp-baja); }
+
+.servicio-title {
+    font-weight: bold;
+    color: var(--nav-blue);
+}
+
+.servicio-desc {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 2px;
+}
+
+/* --- RESPONSIVE / VISTA MÓVIL --- */
+@media (max-width: 900px) {
+    .main-content {
+        grid-template-columns: 1fr; /* Pasa a una sola columna en pantallas pequeñas */
+    }
+    .navbar {
+        gap: 15px;
+        flex-wrap: wrap;
+        border-radius: 20px; /* Adapta el botón píldora a menú colapsado */
+    }
+}
