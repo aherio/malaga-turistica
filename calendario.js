@@ -5,17 +5,22 @@ const CONTRASENA_SECRETA = "1234"; // Contraseña para el modo edición
 const adminStatus = document.getElementById('admin-status');
 const btnLogin = document.getElementById('btn-login');
 
-// Lista global donde se guardan las instancias para refrescarlas al cambiar de modo
+// ARRAY GLOBAL CENTRALIZADO: Guarda las instancias de los calendarios para poder actualizarlos
 const listaCalendarios = []; 
+
+// BASE DE DATOS DE FECHAS OCUPADAS: Almacena los días reservados por cada ID de apartamento
+const DB_RESERVAS = {
+    "cal-apartamento1": ["2026-05-08", "2026-05-15", "2026-05-16"], // Torrox
+    "cal-apartamento2": ["2026-05-22", "2026-05-23"]               // Rincón
+};
 
 // --- CLASE OBJETO PARA LA CREACIÓN DE CALENDARIOS INDEPENDIENTES ---
 class Calendario {
-    constructor(containerId, fechasIniciales) {
+    constructor(containerId) {
         this.containerId = containerId;
         this.container = document.getElementById(containerId);
         
-        // Verificar que el contenedor existe en el HTML antes de continuar
-        if (!this.container) return;
+        if (!this.container) return; // Filtro de seguridad por si no existe el contenedor
 
         this.monthYearText = this.container.querySelector('.month-year');
         this.calendarDaysContainer = this.container.querySelector('.calendar-days');
@@ -23,13 +28,12 @@ class Calendario {
         this.nextBtn = this.container.querySelector('.next-month');
         
         this.currentDate = new Date();
-        this.ocupadas = new Set(fechasIniciales); // Set con formato 'AAAA-MM-DD'
         this.months = [
             "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
             "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
         ];
 
-        // Configurar escuchadores para cambiar de mes
+        // Configurar los botones de navegación de meses
         this.prevBtn.addEventListener('click', () => {
             this.currentDate.setMonth(this.currentDate.getMonth() - 1);
             this.renderCalendar();
@@ -40,19 +44,21 @@ class Calendario {
             this.renderCalendar();
         });
 
-        // Auto-agregar esta instancia a la lista global al ser creada
+        // Registrar automáticamente la instancia en el array global antes de renderizar
         listaCalendarios.push(this);
 
-        // Dibujar por primera vez
+        // Dibujar el calendario
         this.renderCalendar();
     }
 
+    // Generar formato estándar de fecha 'AAAA-MM-DD'
     formatearFecha(year, month, day) {
         const m = String(month + 1).padStart(2, '0');
         const d = String(day).padStart(2, '0');
         return `${year}-${m}-${d}`;
     }
 
+    // Método principal para pintar la cuadrícula del mes actual
     renderCalendar() {
         const year = this.currentDate.getFullYear();
         const month = this.currentDate.getMonth();
@@ -64,14 +70,14 @@ class Calendario {
         this.monthYearText.textContent = `${this.months[month]} ${year}`;
         this.calendarDaysContainer.innerHTML = '';
 
-        // 1. Espacios vacíos
+        // 1. Generar los espacios vacíos del inicio del mes
         for (let i = 0; i < startOffset; i++) {
             const emptyDiv = document.createElement('div');
             emptyDiv.classList.add('empty');
             this.calendarDaysContainer.appendChild(emptyDiv);
         }
 
-        // 2. Pintar los días y aplicar el filtro de fechas ocupadas
+        // 2. Generar los días numéricos del mes
         for (let day = 1; day <= totalDays; day++) {
             const dayDiv = document.createElement('div');
             dayDiv.textContent = day;
@@ -79,30 +85,38 @@ class Calendario {
 
             const fechaString = this.formatearFecha(year, month, day);
 
-            // ¡IMPORTANTE!: Comprobación de la base de datos interna de reservas
-            if (this.ocupadas.has(fechaString)) {
-                dayDiv.classList.add('busy');      // Clase que aplica el tachado rojo
+            // COMPROBACIÓN: Consultamos el Array global dinámico
+            if (DB_RESERVAS[this.containerId] && DB_RESERVAS[this.containerId].includes(fechaString)) {
+                dayDiv.classList.add('busy'); // Aplica los estilos del tachado rojo
             } else {
-                dayDiv.classList.add('available'); // Clase de día libre normal
+                dayDiv.classList.add('available');
             }
 
-            // Cambiar aspecto del ratón según permisos
+            // Cambiar comportamiento del puntero según los privilegios del Admin
             dayDiv.style.cursor = esAdmin ? "pointer" : "default";
 
-            // Evento click interactivo (Solo funciona si esAdmin es true)
+            // Evento interactivo para el marcado/desmarcado de fechas
             dayDiv.addEventListener('click', () => {
-                if (!esAdmin) return; 
+                if (!esAdmin) return; // Si es cliente, bloquea la acción
 
-                if (this.ocupadas.has(fechaString)) {
-                    this.ocupadas.delete(fechaString);
-                    dayDiv.classList.remove('busy');
-                    dayDiv.classList.add('available');
-                } else {
-                    this.ocupadas.add(fechaString);
-                    dayDiv.classList.add('busy');
-                    dayDiv.classList.remove('available');
+                // Inicializar el array del apartamento si no existiera
+                if (!DB_RESERVAS[this.containerId]) {
+                    DB_RESERVAS[this.containerId] = [];
                 }
-                console.log(`Cambio en [${this.containerId}]. Ocupadas actuales:`, Array.from(this.ocupadas));
+
+                // LÓGICA DE ACTUALIZACIÓN EN TIEMPO REAL
+                if (DB_RESERVAS[this.containerId].includes(fechaString)) {
+                    // Si ya estaba reservado, lo eliminamos del array
+                    DB_RESERVAS[this.containerId] = DB_RESERVAS[this.containerId].filter(f => f !== fechaString);
+                } else {
+                    // Si estaba libre, lo añadimos al array
+                    DB_RESERVAS[this.containerId].push(fechaString);
+                }
+
+                // ACTUALIZACIÓN INMEDIATA: Volvemos a pintar este calendario para aplicar el cambio visual
+                this.renderCalendar();
+                
+                console.log(`Actualizado [${this.containerId}]:`, DB_RESERVAS[this.containerId]);
             });
 
             this.calendarDaysContainer.appendChild(dayDiv);
@@ -110,11 +124,12 @@ class Calendario {
     }
 }
 
-// --- CREACIÓN DE LAS INSTANCIAS (Se añaden solas a listaCalendarios gracias al constructor) ---
-new Calendario('cal-apartamento1', ["2026-05-15", "2026-05-16", "2026-05-08"]); // Torrox
-new Calendario('cal-apartamento2', ["2026-05-22", "2026-05-23"]);               // Rincón
+// --- INITIALIZACIÓN DE LOS APARTAMENTOS ---
+// Las instancias se registran automáticamente en el array global mediante el constructor
+new Calendario('cal-apartamento1');
+new Calendario('cal-apartamento2');
 
-// --- EVENTO DE LOGIN (COMPARTIDO Y COLOCADO ABAJO) ---
+// --- EVENTO DE LOGIN COMPARTIDO ---
 btnLogin.addEventListener('click', () => {
     if (!esAdmin) {
         const intento = prompt("Introduce la contraseña de administrador:");
@@ -133,6 +148,6 @@ btnLogin.addEventListener('click', () => {
         adminStatus.style.color = "black";
     }
     
-    // Forzar a todos los calendarios creados a redibujarse conservando sus arrays estables
+    // Al cambiar de rol, refrescamos todos los calendarios del array global
     listaCalendarios.forEach(instanciaCal => instanciaCal.renderCalendar());
 });
