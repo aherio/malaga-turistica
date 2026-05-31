@@ -130,22 +130,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+   
     // ==========================================================================
-    // 3. DESCARGA AUTOMÁTICA EN TIEMPO REAL DESDE LA NUBE
+    // 3. DESCARGA AUTOMÁTICA EN TIEMPO REAL DESDE LA NUBE (REVISADA ANTI-NULL)
     // ==========================================================================
     database.ref('reservas_malaga').once('value').then((snapshot) => {
         const datosEnLaNube = snapshot.val();
-        if (datosEnLaNube) {
+        
+        // Si hay datos, los cargamos. Si devuelve 'null', creamos la estructura en vivo
+        if (datosEnLaNube && datosEnLaNube !== null) {
             DB_RESERVAS = datosEnLaNube;
         } else {
-            DB_RESERVAS = { "cal-apartamento1": [], "cal-apartamento2": [] };
+            DB_RESERVAS = { 
+                "cal-apartamento1": [], 
+                "cal-apartamento2": [] 
+            };
         }
         
+        // Inicializamos los calendarios sí o sí
         new Calendario('cal-apartamento1');
         new Calendario('cal-apartamento2');
         listaCalendarios.forEach(cal => cal.renderCalendar());
+        
     }).catch((error) => {
         console.error("Error conectando a internet: ", error);
+        
+        // Plan B: Si falla internet o las reglas de Firebase bloquean, la web sigue funcionando localmente
+        DB_RESERVAS = { "cal-apartamento1": [], "cal-apartamento2": [] };
         new Calendario('cal-apartamento1');
         new Calendario('cal-apartamento2');
         listaCalendarios.forEach(cal => cal.renderCalendar());
