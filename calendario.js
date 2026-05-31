@@ -154,6 +154,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================================================
     // 4. CONTROL DEL MODO ADMINISTRADOR (LOGIN Y GUARDADO INTELIGENTE)
     // ==========================================================================
+    // ==========================================================================
+    // 4. CONTROL DEL MODO ADMINISTRADOR (LOGIN Y GUARDADO INTELIGENTE)
+    // ==========================================================================
     if (btnLogin) {
         btnLogin.addEventListener('click', () => {
             if (!esAdmin) {
@@ -165,7 +168,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         adminStatus.style.color = "#2e7d32";
                     }
                     btnLogin.textContent = "Cerrar Sesión";
-                    if (btnSave) btnSave.style.display = "inline-block"; 
+                    
+                    // FORZADO: Aseguramos que obligue al botón a mostrarse en pantalla
+                    if (btnSave) {
+                        btnSave.style.setProperty("display", "block", "important");
+                        btnSave.style.display = "block"; 
+                    }
                 } else {
                     alert("Contraseña incorrecta.");
                 }
@@ -181,27 +189,3 @@ document.addEventListener("DOMContentLoaded", () => {
             listaCalendarios.forEach(instanciaCal => instanciaCal.renderCalendar());
         });
     }
-
-    // BOTÓN VERDE "GUARDAR CAMBIOS" UNIFICADO Y ANTI-NULL
-    if (btnSave) {
-        btnSave.addEventListener('click', () => {
-            
-            // Si la base de datos de internet venía vacía (null), forzamos la estructura inicial
-            if (!DB_RESERVAS || Object.keys(DB_RESERVAS).length === 0) {
-                DB_RESERVAS = {
-                    "cal-apartamento1": [],
-                    "cal-apartamento2": []
-                };
-            }
-
-            // Subimos los datos limpios a Firebase
-            database.ref('reservas_malaga').set(DB_RESERVAS)
-                .then(() => {
-                    alert("💾 ¡Perfecto! Fechas sincronizadas en internet con éxito. El bloqueo ha terminado.");
-                })
-                .catch((error) => {
-                    alert("Error crítico al subir a Firebase: " + error.message);
-                });
-        });
-    }
-});
