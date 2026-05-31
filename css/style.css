@@ -242,3 +242,37 @@
         border-radius: 8px;
     }
 }
+/* ==========================================================================
+   BARRA DE NAVEGACIÓN ADAPTABLE Y TOTALMENTE CENTRADA (PC Y MÓVIL)
+   ========================================================================== */
+.navbar {
+    display: flex;
+    flex-wrap: wrap;       /* Permite que baje de fila si no cabe */
+    justify-content: center; /* Centra los elementos horizontalmente */
+    align-items: center;     /* Centra los elementos verticalmente */
+    gap: 15px 30px;          /* Espaciado controlado: 15px arriba/abajo, 30px a los lados */
+    padding: 15px;
+    max-width: 100%;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    /* Evita que se peguen a los bordes en móviles pequeños */
+    min-width: 100px;        
+    text-align: center;
+}
+
+/* Ajuste específico para pantallas de móvil */
+@media (max-width: 480px) {
+    .navbar {
+        /* Fuerza a que se organicen exactamente en bloques limpios distribuidos */
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+        justify-items: center;
+        gap: 20px; /* Espacio uniforme entre las 4 palabras */
+    }
+}
