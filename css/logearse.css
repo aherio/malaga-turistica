@@ -1,0 +1,58 @@
+/* ==========================================
+   PANEL DE ADMINISTRACIÓN Y BOTONES
+   ========================================== */
+
+.admin-panel {
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 600px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#admin-status {
+    font-weight: bold;
+    margin-bottom: 12px;
+    display: block;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+/* Estilo base para ambos botones */
+.admin-panel button {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.admin-panel button:active {
+    transform: scale(0.98);
+}
+
+/* Botón de Acceso / Cerrar Sesión */
+#btn-login {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+#btn-login:hover {
+    background-color: #d5d5d5;
+}
+
+/* Botón de Guardar Cambios (Oculto por defecto) */
+#btn-save {
+    display: none; /* Lo despierta el JavaScript */
+    background-color: #2e7d32;
+    color: white;
+    margin-left: 12px;
+}
+
+#btn-save:hover {
+    background-color: #1b5e20;
+}
