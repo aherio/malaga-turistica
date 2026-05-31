@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto y Reservas - Málaga Turística</title>
+    <link rel="stylesheet" href="css/contacto.css">
+</head>
+<body>
+
+    <div class="header-bg">
+        <div class="header-banner"></div>
+        <h1 class="header-title">Málaga Turística</h1>
+    </div>
+
+    <div class="nav-container">
+        <nav class="navbar">
+            <a href="alojamientos.html">Alojamientos</a>
+            <a href="precios.html">Precios</a>
+            <a href="contacto.html" class="active">Contacto</a>
+            <a href="calendario.html">Reservas</a>
+        </nav>
+    </div>
+
+    <div class="page-container">
+        <main class="panel">
+            <div class="panel-header">Solicitud de Información / Reserva</div>
+            <div class="panel-body">
+                
+                <form action="https://formspree.io/f/xkoeqzze" method="POST" id="form-contacto">
+                    
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo:</label>
+                        <input type="text" id="nombre" name="nombre" required placeholder="Ej: Juan Pérez">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico:</label>
+                        <input type="email" id="email" name="email" required placeholder="ejemplo@correo.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apartamento">Apartamento de interés:</label>
+                        <select id="apartamento" name="apartamento" required>
+                            <option value="" disabled selected>Selecciona una opción...</option>
+                            <option value="torrox">Apartamento Torrox</option>
+                            <option value="rincon">Apartamento Rincón</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group row">
+                        <div>
+                            <label for="desde">Fecha Entrada:</label>
+                            <input type="date" id="desde" name="fecha_entrada" required>
+                        </div>
+                        <div>
+                            <label for="hasta">Fecha Salida:</label>
+                            <input type="date" id="hasta" name="fecha_salida" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje o peticiones especiales:</label>
+                        <textarea id="mensaje" name="mensaje" rows="5" placeholder="¿Cuántas personas viajan, necesitas cuna...?"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Enviar Solicitud</button>
+                </form>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
