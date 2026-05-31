@@ -1,11 +1,14 @@
 // ==========================================================================
 // 1. CONFIGURACIÓN DE TU BASE DE DATOS REAL (CONECTADA CON TU PROYECTO)
 // ==========================================================================
+// ==========================================================================
+// 1. CONFIGURACIÓN DE TU BASE DE DATOS REAL
+// ==========================================================================
 const firebaseConfig = {
     apiKey: "AIzaSyDoOHH2r6kUVn3k-LBE2SkRj6g08Uuc_UI",
     authDomain: "malaga-turistica.firebaseapp.com",
-    // CORREGIDO: URL exacta apuntando al servidor de Bélgica/Europa de tu proyecto
-    databaseURL: "https://malaga-turistica-default-rtdb.europe-west1.firebasedatabase.app", 
+    // REVISA ESTA LÍNEA: Debe ser exactamente este enlace para el servidor de Europa
+    databaseURL: "https://malaga-turistica-default-rtdb.europe-west1.firebasedatabase.app/", 
     projectId: "malaga-turistica",
     storageBucket: "malaga-turistica.firebasestorage.app",
     messagingSenderId: "871403346309",
@@ -13,8 +16,10 @@ const firebaseConfig = {
     measurementId: "G-7M8YT97RLC"
 };
 
-// Inicializamos los servicios de Firebase de forma global
-firebase.initializeApp(firebaseConfig);
+// Inicializamos Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const database = firebase.database();
 
 // ==========================================================================
@@ -150,6 +155,62 @@ document.addEventListener("DOMContentLoaded", () => {
         listaCalendarios.forEach(cal => cal.renderCalendar());
     });
 
+    // ==========================================================================
+    // 4. CONTROL DEL MODO ADMINISTRADOR (LOGIN Y GUARDADO INTELIGENTE)
+    // ==========================================================================
+    if (btnLogin) {
+        btnLogin.addEventListener('click', () => {
+            if (!esAdmin) {
+                const intento = prompt("Introduce la contraseña de administrador:");
+                if (intento === CONTRASENA_SECRETA) {
+                    esAdmin = true;
+                    if (adminStatus) {
+                        adminStatus.textContent = "Modo: 🔐 Administrador (Modo Edición)";
+                        adminStatus.style.color = "#2e7d32";
+                    }
+                    btnLogin.textContent = "Cerrar Sesión";
+                    if (btnSave) btnSave.style.display = "inline-block"; 
+                } else {
+                    alert("Contraseña incorrecta.");
+                }
+            } else {
+                esAdmin = false;
+                if (adminStatus) {
+                    adminStatus.textContent = "Modo: 👤 Cliente (Solo Lectura)";
+                    adminStatus.style.color = "black";
+                }
+                btnLogin.textContent = "Acceso Admin";
+                if (btnSave) btnSave.style.display = "none"; 
+            }
+            listaCalendarios.forEach(instanciaCal => instanciaCal.renderCalendar());
+        });
+    }
+
+    // BOTÓN VERDE "GUARDAR CAMBIOS" REFORZADO
+    if (btnSave) {
+        btnSave.addEventListener('click', () => {
+            
+            // SEGURIDAD: Si DB_RESERVAS está vacío o es null por culpa del inicio, 
+            // nos aseguramos de que tenga estructura antes de subirlo a internet
+            if (!DB_RESERVAS || Object.keys(DB_RESERVAS).length === 0) {
+                DB_RESERVAS = {
+                    "cal-apartamento1": DB_RESERVAS["cal-apartamento1"] || [],
+                    "cal-apartamento2": DB_RESERVAS["cal-apartamento2"] || []
+                };
+            }
+
+            // Subimos los datos a la nube de Firebase
+            database.ref('reservas_malaga').set(DB_RESERVAS)
+                .then(() => {
+                    alert("💾 ¡Perfecto! Fechas sincronizadas en internet con éxito. Ese 'null' de tu pantalla desaparecerá.");
+                })
+                .catch((error) => {
+                    alert("Error crítico al subir a Firebase: " + error.message);
+                });
+        });
+    }
+
+    
     // ==========================================================================
     // 4. INICIO DE SESIÓN DE ADMINISTRADOR Y GUARDADO SÍNCRONO
     // ==========================================================================
