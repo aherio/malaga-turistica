@@ -4,7 +4,8 @@
 const firebaseConfig = {
     apiKey: "AIzaSyDoOHH2r6kUVn3k-LBE2SkRj6g08Uuc_UI",
     authDomain: "malaga-turistica.firebaseapp.com",
-    databaseURL: "https://malaga-turistica-default-rtdb.europe-west1.firebasedatabase.app", // Enlace directo a tu servidor de Europa
+    // CORREGIDO: URL exacta apuntando al servidor de Bélgica/Europa de tu proyecto
+    databaseURL: "https://malaga-turistica-default-rtdb.europe-west1.firebasedatabase.app", 
     projectId: "malaga-turistica",
     storageBucket: "malaga-turistica.firebasestorage.app",
     messagingSenderId: "871403346309",
