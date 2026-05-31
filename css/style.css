@@ -1,32 +1,56 @@
+/* ==========================================================================
+   1. IMPORTACIONES Y VARIABLES GLOBALES
+   ========================================================================== */
 @import "header.css";
 @import "common.css";
 @import "navbar.css";
 @import "color.css";
 
-/* 1. Ajuste del Contenedor Principal */
+:root {
+    --blue-bg: #3b81eb;        /* Azul corporativo principal */
+    --light-crema: #fdfaf0;    /* Fondo crema suave de las tarjetas */
+    --border-grey: #ddd;       /* Gris claro para bordes */
+    --text-dark: #333333;
+}
+
+* {
+    box-sizing: border-box;    /* Vital para que paddings y borders no deformen las cajas */
+    margin: 0;
+    padding: 0;
+}
+
+/* ==========================================================================
+   2. ESTRUCTURA PRINCIPAL (GRID / FLEXBOX)
+   ========================================================================== */
 .row {
     display: flex;
     flex-wrap: nowrap; 
-    align-items: stretch; /* Cambiado a stretch para que todas las columnas midan lo mismo de alto */
+    align-items: stretch;      /* Hace que las 3 columnas midan exactamente lo mismo de alto */
     gap: 15px;
     padding: 15px;
-    max-width: 1200px; /* Es mejor poner un tope para que no se estire infinito en monitores 4K */
-    margin: 0 auto;    /* Centra la web */
-    box-sizing: border-box; /* ¡VITAL! Para que el padding y border no sumen ancho extra */
+    max-width: 1200px;         /* Evita que se estire al infinito en pantallas gigantes */
+    margin: 0 auto;            /* Centra la web en el monitor */
+    box-sizing: border-box; 
 }
 
-/* 2. Bloque Izquierdo (Aventura) */
+/* ==========================================================================
+   3. COLUMNA IZQUIERDA: ACTIVIDADES DE AVENTURA
+   ========================================================================== */
 .sidebar-aventura {
-    flex: 1 1 10%; /* Usamos flex grow/shrink equilibrado */
-    min-width: 100px; 
+    flex: 1 1 20%;             /* Proporción equilibrada en PC */
+    min-width: 150px; 
     background-color: #f1f1f1;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-grey);
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
-/* 3. Bloque Central (Carrusel) */
+/* ==========================================================================
+   4. COLUMNA CENTRAL: CARRUSEL DE IMÁGENES (PROTECCIÓN DE TAMAÑO Y TEXTO)
+   ========================================================================== */
 .main-carrusel {
-    flex: 1 1 40%; /* Le damos el doble de importancia que a los laterales */
+    flex: 1 1 60%;             /* El carrusel toma el protagonismo central */
     min-width: 0;
     background-color: transparent;
     display: flex;
@@ -34,47 +58,121 @@
     box-sizing: border-box;
 }
 
-/* Ajuste de imagen del carrusel para que no sea gigante */
-.carousel-item img, .main img {
+.carousel-container {
+    position: relative;
+    overflow: hidden;
     width: 100%;
-    height: auto; /* Un poco más de aire */
-    object-fit: cover;
-    display: block; /* Quita espacios fantasmas debajo de la imagen */
+    height: 420px;             /* Altura total rígida y fija del bloque en PC */
+    background-color: var(--blue-bg); 
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    flex-direction: column;
 }
 
-/* 4. Bloque Derecho (Cultura) - Corregido el error del punto */
+/* Forzar a la imagen a ocupar su espacio sin pisar la franja de texto */
+.carousel-item img, .main img {
+    width: 100%;
+    /* Resta matemáticamente los 60px de la caja azul de texto para que nunca se lo coma */
+    height: calc(420px - 60px); 
+    object-fit: cover;         /* Recorta de forma proporcional sin chafar los paisajes */
+    display: block; 
+}
+
+/* Franja azul inferior donde aparece el texto (Málaga, Torrox, Frigiliana...) */
+.pueblo-info {
+    background-color: var(--blue-bg);
+    color: white;
+    height: 60px;              /* Altura fija blindada para el texto */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* Centrado vertical */
+    align-items: center;       /* Centrado horizontal */
+    text-align: center;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Lógica interna de transición del carrusel */
+.carousel-item {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-item.active {
+    display: flex;
+    flex-direction: column;
+    animation: fade 0.5s; 
+}
+
+/* Botones de control (Flechas Circulares) */
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%); 
+    width: 45px;  
+    height: 45px;
+    background-color: rgba(255, 255, 255, 0.4); 
+    border-radius: 50%; 
+    border: 2px solid white; 
+    color: #003d3d; 
+    font-size: 24px; 
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 100; 
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease; 
+}
+
+.prev { left: 15px; }
+.next { right: 15px; }
+
+.prev:hover, .next:hover {
+    background-color: rgba(255, 255, 255, 0.8); 
+}
+
+/* ==========================================================================
+   5. COLUMNA DERECHA: EXPLORA MÁLAGA CULTURAL
+   ========================================================================== */
 .sidebar-cultural-grande {
-    flex: 1 1 10%; /* Un poco más ancho que la izquierda */
-    min-width: 100px;
+    flex: 1 1 20%; 
+    min-width: 150px;
     background-color: #ffffff;
     border: 1px solid #003d3d;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
-/* --- ESTILOS INTERNOS REUTILIZABLES --- */
-
+/* ==========================================================================
+   6. DISEÑO INTERNO DE LAS TARJETAS Y TEXTOS (AVENTURA Y CULTURA)
+   ========================================================================== */
 .sidebar-header, .header-grande {
-    background-color: #3b81eb;
+    background-color: var(--blue-bg);
     color: white;
-    padding: 10px;
+    padding: 12px 10px;
     text-align: center;
 }
 
 .item-aventura, .card-cultural {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 12px 10px;
     text-decoration: none;
-    color: #3b81eb;
+    color: var(--blue-bg);
     border-bottom: 1px solid #eee;
-    background-color: #fdfaf0; /* Un blanco con un toque crema */
+    background-color: var(--light-crema); 
+    gap: 10px;                  /* Espacio entre el icono/emoji y los textos */
 }
 
 .item-aventura:hover, .card-cultural:hover {
     background-color: #f9f9f9;
 }
 
-/* Estilos de texto compactos */
+/* Estilos de textos compactos e impecables */
 .titulo, .info-card h4 {
     font-size: 0.85rem;
     font-weight: bold;
@@ -87,192 +185,41 @@
     margin: 0;
 }
 
-/* El bloque verde debajo del carrusel */
-.pueblo-info {
-    background-color:#3b81eb;
-    color: white;
-    padding: 8px;
-    text-align: center;
-}
-/* Contenedor del carrusel */
-.carousel-container {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-}
-
-/* Ocultamos todas las imágenes por defecto */
-.carousel-item {
-    display: none;
-    width: 100%;
-}
-
-/* Solo mostramos la que tenga la clase active */
-.carousel-item.active {
-    display: block;
-    animation: fade 0.5s; /* Un efecto de suavizado opcional */
-}
-
-.prev, .next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%); /* Centra verticalmente */
-    
-    /* El "Círculo" */
-    width: 45px;  /* Más grande para que sea fácil de tocar con el dedo */
-    height: 45px;
-    background-color: rgba(255, 255, 255, 0.4); /* Fondo blanco semitransparente */
-    border-radius: 50%; /* Lo hace redondo */
-    border: 2px solid white; /* Un borde blanco fino para que contraste */
-    
-    /* El "Puntero" */
-    color: #003d3d; /* El verde oscuro de tu web */
-    font-size: 24px; /* Flecha más grande y negrita */
-    font-weight: bold;
-    
-    /* Comportamiento */
-    cursor: pointer;
-    z-index: 100; /* Asegura que esté por encima de todo */
-    display: flex; /* Centra la flecha dentro del círculo */
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease; /* Efecto suave al pasar el dedo */
-}
-
-/* Posicionamiento */
-.prev {
-    left: 15px; /* Un poco de aire desde el borde */
-}
-
-.next {
-    right: 15px; /* Un poco de aire desde el borde */
-}
-
-/* Efecto visual al pasar el ratón (o pulsar) */
-.prev:hover, .next:hover {
-    background-color: rgba(255, 255, 255, 0.8); /* Se vuelve más sólido */
-}
-/* --- VENTANA MODAL (FONDO OSCURECIDO) --- */
-.modal {
-    display: none; /* Oculto por defecto */
-    position: fixed;
-    z-index: 9999; /* Siempre por encima de todo */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Fondo negro translúcido */
-    align-items: center;
-    justify-content: center;
-}
-
-/* CONTENEDOR DEL FORMULARIO */
-.modal-content {
-    background-color: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-    position: relative;
-    animation: aparecer 0.3s ease-out;
-}
-
-@keyframes aparecer {
-    from { transform: translateY(-30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-/* BOTÓN CERRAR (X) */
-.close-modal {
-    position: absolute;
-    right: 20px;
-    top: 15px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #aaa;
-    cursor: pointer;
-}
-.close-modal:hover { color: #333; }
-
-.modal-content h2 {
-    margin-top: 0;
-    color: #2c3e50;
-    font-size: 1.3rem;
-    border-bottom: 2px solid #4163e9; /* Tu azul corporativo */
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-/* CAMPOS DEL FORMULARIO */
-.form-group {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-}
-
-.form-group.row {
-    flex-direction: row;
-    gap: 15px;
-}
-.form-group.row div { flex: 1; display: flex; flex-direction: column; }
-
-.form-group label {
-    font-weight: bold;
-    font-size: 0.85rem;
-    color: #555;
-    margin-bottom: 5px;
-}
-
-.form-group input, .form-group select, .form-group textarea {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 0.9rem;
-}
-
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-    border-color: #4163e9;
-    outline: none;
-}
-
-/* BOTÓN DE ENVIAR FORMULARIO */
-.btn-submit {
-    width: 100%;
-    padding: 12px;
-    background-color: #4163e9; /* Tu azul */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-.btn-submit:hover { background-color: #2b4cc9; }
+/* Animación de transición suave */
 @keyframes fade {
     from { opacity: 0.4; }
     to { opacity: 1; }
+}
 
-    
- @media (max-width: 850px) {
+/* ==========================================================================
+   7. MÓDULO RESPONSIVE TOTAL (DISEÑO MÓVILES - Menos de 850px)
+   ========================================================================== */
+@media (max-width: 850px) {
     .row {
-        flex-direction: column; /* Apila las columnas verticalmente */
+        flex-direction: column; /* Transforma las 3 columnas en una sola fila vertical */
         padding: 10px;
+        gap: 20px;
     }
 
     .sidebar-aventura, 
     .main-carrusel, 
     .sidebar-cultural-grande {
-        flex: 1 1 100%; /* Ocupan todo el ancho disponible */
-        min-width: 0;    /* ¡IMPORTANTE! Elimina el bloqueo de los 400px */
+        flex: 1 1 100%; 
+        min-width: 0;    
         width: 100%;
     }
 
-    .carousel-item img, .main img {
-        height: auto;    /* Deja que la imagen mantenga su proporción */
-        max-height: 250px; 
+    /* Reducción proporcional del bloque del carrusel en pantallas de móviles */
+    .carousel-container {
+        height: 280px; 
     }
-}   
+
+    /* La imagen en móviles recalcula su espacio restando los 55px del texto */
+    .carousel-item img, .main img {
+        height: calc(280px - 55px); 
+    }
+
+    .pueblo-info {
+        height: 55px;
+    }
+}
