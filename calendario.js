@@ -154,13 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================================================
     // 4. CONTROL DEL MODO ADMINISTRADOR (LOGIN Y GUARDADO INTELIGENTE)
     // ==========================================================================
-   // ==========================================================================
-    // 4. CONTROL DEL MODO ADMINISTRADOR (LOGIN Y GUARDADO INTELIGENTE)
-    // ==========================================================================
-   // ==========================================================================
-    // 4. CONTROL DEL MODO ADMINISTRADOR (LOGIN Y GUARDADO INTELIGENTE)
-    // ==========================================================================
-    if (btnLogin) {
+  if (btnLogin) {
         btnLogin.addEventListener('click', () => {
             if (!esAdmin) {
                 const intento = prompt("Introduce la contraseña de administrador:");
@@ -194,17 +188,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // BOTÓN VERDE "GUARDAR CAMBIOS" UNIFICADO Y ANTI-NULL
+    // BOTÓN VERDE "GUARDAR CAMBIOS" TOTALMENTE CORREGIDO
     if (btnSave) {
         btnSave.addEventListener('click', () => {
             
-            // Si la base de datos de internet venía vacía (null), forzamos la estructura inicial
-            if (!DB_RESERVAS || Object.keys(DB_RESERVAS).length === 0) {
-                DB_RESERVAS = {
-                    "cal-apartamento1": [],
-                    "cal-apartamento2": []
-                };
+            // Corrección de estructura interna para que no rompa la lectura del calendario
+            if (!DB_RESERVAS) {
+                DB_RESERVAS = {};
             }
+            if (!DB_RESERVAS["cal-apartamento1"]) DB_RESERVAS["cal-apartamento1"] = [];
+            if (!DB_RESERVAS["cal-apartamento2"]) DB_RESERVAS["cal-apartamento2"] = [];
 
             // Subimos los datos limpios a Firebase
             database.ref('reservas_malaga').set(DB_RESERVAS)
