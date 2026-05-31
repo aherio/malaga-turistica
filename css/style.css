@@ -223,3 +223,22 @@
         height: 55px;
     }
 }
+/* 1. Limpiamos cualquier fondo extraño en el contenedor general */
+    .row {
+        background-color: transparent !important;
+        background: none !important;
+    }
+
+    /* 2. Forzamos a los bloques laterales a tener un color limpio y moderno */
+    .sidebar-aventura {
+        background-color: #f8f9fa !important; /* Un gris muy limpio que sustituye al amarillo */
+        border: 1px solid #e2e8f0 !important;   /* Borde suave sutil */
+        border-radius: 8px;                    /* Esquinas redondeadas estéticas */
+    }
+
+    .sidebar-cultural-grande {
+        background-color: #ffffff !important; /* Blanco puro para el bloque de cultura */
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px;
+    }
+}
