@@ -1,6 +1,7 @@
 /* ==========================================================================
-   1. IMPORTACIONES Y VARIABLES GLOBALES
+   1. IMPORTACIONES, FUENTES Y VARIABLES GLOBALES
    ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
 @import "header.css";
 @import "common.css";
 @import "navbar.css";
@@ -31,6 +32,8 @@
     max-width: 1200px;         /* Evita que se estire al infinito en pantallas gigantes */
     margin: 0 auto;            /* Centra la web en el monitor */
     box-sizing: border-box; 
+    background-color: transparent !important;
+    background: none !important;
 }
 
 /* ==========================================================================
@@ -39,15 +42,16 @@
 .sidebar-aventura {
     flex: 1 1 20%;             /* Proporción equilibrada en PC */
     min-width: 150px; 
-    background-color: #f1f1f1;
-    border: 1px solid var(--border-grey);
+    background-color: #f8f9fa !important; /* Un gris muy limpio que sustituye al amarillo */
+    border: 1px solid #e2e8f0 !important;   /* Borde suave sutil */
+    border-radius: 8px;                     /* Esquinas redondeadas estéticas */
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
 }
 
 /* ==========================================================================
-   4. COLUMNA CENTRAL: CARRUSEL DE IMÁGENES (PROTECCIÓN DE TAMAÑO Y TEXTO)
+   4. COLUMNA CENTRAL: CARRUSEL DE IMÁGENES
    ========================================================================== */
 .main-carrusel {
     flex: 1 1 60%;             /* El carrusel toma el protagonismo central */
@@ -72,13 +76,12 @@
 /* Forzar a la imagen a ocupar su espacio sin pisar la franja de texto */
 .carousel-item img, .main img {
     width: 100%;
-    /* Resta matemáticamente los 60px de la caja azul de texto para que nunca se lo coma */
-    height: calc(420px - 60px); 
+    height: calc(420px - 60px); /* Resta matemáticamente la caja azul de texto */
     object-fit: cover;         /* Recorta de forma proporcional sin chafar los paisajes */
     display: block; 
 }
 
-/* Franja azul inferior donde aparece el texto (Málaga, Torrox, Frigiliana...) */
+/* Franja azul inferior donde aparece el texto */
 .pueblo-info {
     background-color: var(--blue-bg);
     color: white;
@@ -140,15 +143,16 @@
 .sidebar-cultural-grande {
     flex: 1 1 20%; 
     min-width: 150px;
-    background-color: #ffffff;
-    border: 1px solid #003d3d;
+    background-color: #ffffff !important; /* Blanco puro para el bloque de cultura */
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
 }
 
 /* ==========================================================================
-   6. DISEÑO INTERNO DE LAS TARJETAS Y TEXTOS (AVENTURA Y CULTURA)
+   6. DISEÑO INTERNO DE LAS TARJETAS Y TEXTOS
    ========================================================================== */
 .sidebar-header, .header-grande {
     background-color: var(--blue-bg);
@@ -192,7 +196,7 @@
 }
 
 /* ==========================================================================
-   7. MÓDULO RESPONSIVE TOTAL (DISEÑO MÓVILES - Menos de 850px)
+   7. MÓDULO RESPONSIVE GENERAL (DISEÑO MÓVILES - Menos de 850px)
    ========================================================================== */
 @media (max-width: 850px) {
     .row {
@@ -223,27 +227,9 @@
         height: 55px;
     }
 }
-/* 1. Limpiamos cualquier fondo extraño en el contenedor general */
-    .row {
-        background-color: transparent !important;
-        background: none !important;
-    }
 
-    /* 2. Forzamos a los bloques laterales a tener un color limpio y moderno */
-    .sidebar-aventura {
-        background-color: #f8f9fa !important; /* Un gris muy limpio que sustituye al amarillo */
-        border: 1px solid #e2e8f0 !important;   /* Borde suave sutil */
-        border-radius: 8px;                    /* Esquinas redondeadas estéticas */
-    }
-
-    .sidebar-cultural-grande {
-        background-color: #ffffff !important; /* Blanco puro para el bloque de cultura */
-        border: 1px solid #e2e8f0 !important;
-        border-radius: 8px;
-    }
-}
 /* ==========================================================================
-   BARRA DE NAVEGACIÓN ADAPTABLE Y TOTALMENTE CENTRADA (PC Y MÓVIL)
+   8. BARRA DE NAVEGACIÓN ESTILIZADA, LIGERA Y CENTRADA
    ========================================================================== */
 .navbar {
     display: flex;
@@ -251,28 +237,41 @@
     justify-content: center; /* Centra los elementos horizontalmente */
     align-items: center;     /* Centra los elementos verticalmente */
     gap: 15px 30px;          /* Espaciado controlado: 15px arriba/abajo, 30px a los lados */
-    padding: 15px;
+    padding: 18px;
     max-width: 100%;
+    font-family: 'Poppins', sans-serif; /* Aplicamos la fuente estilizada */
 }
 
 .navbar a {
     text-decoration: none;
-    color: white;
-    font-weight: bold;
-    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.95); /* Blanco limpio y elegante */
+    font-weight: 400;                /* ¡Cero letras gordas! Grosor estilizado y fino */
     font-size: 14px;
-    /* Evita que se peguen a los bordes en móviles pequeños */
-    min-width: 100px;        
+    letter-spacing: 0.8px;           /* Espacio elegante entre letras */
+    text-transform: uppercase;
     text-align: center;
+    min-width: 110px;
+    transition: color 0.3s ease;
 }
 
-/* Ajuste específico para pantallas de móvil */
+/* Efecto sutil al pasar el ratón por encima (PC) */
+.navbar a:hover {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+/* Cuadrícula simétrica 2x2 perfecta exclusiva para teléfonos móviles */
 @media (max-width: 480px) {
     .navbar {
-        /* Fuerza a que se organicen exactamente en bloques limpios distribuidos */
         display: grid;
-        grid-template-columns: 1fr 1fr; 
+        grid-template-columns: 1fr 1fr; /* 2 columnas idénticas */
         justify-items: center;
-        gap: 20px; /* Espacio uniforme entre las 4 palabras */
+        gap: 25px 15px; /* Separación vertical cómoda para que respire el menú */
+        padding: 25px 15px;
+    }
+    
+    .navbar a {
+        font-size: 13px;  /* Ajuste de tamaño ideal para pantallas de móvil */
+        font-weight: 400; /* Forzamos letra fina también en el teléfono */
     }
 }
