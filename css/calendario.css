@@ -143,7 +143,26 @@ body {
     gap: 5px;
     text-align: center;
 }
+/* Estilo definitivo para los días ocupados con la clase .busy */
+.calendar-days div.busy {
+    background-color: #ffcccc !important; /* Fondo rojo clarito */
+    color: #cc0000 !important;            /* Número en color rojo oscuro */
+    text-decoration: line-through !important; /* Tacha el número de forma estándar */
+    position: relative;
+    font-weight: bold;
+}
 
+/* Línea diagonal roja de esquina a esquina sobre el número */
+.calendar-days div.busy::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top right, transparent 46%, #cc0000 49%, #cc0000 51%, transparent 54%) !important;
+    pointer-events: none; /* Crucial: permite que el Admin pueda seguir haciendo click a través de la línea */
+}
 
 /* ==========================================================================
    MÓDULO RESPONSIVE (MÓVILES Y PANTALLAS PEQUEÑAS)
