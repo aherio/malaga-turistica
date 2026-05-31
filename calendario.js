@@ -1,31 +1,42 @@
+// ==========================================================================
+// 1. CONFIGURACIÓN DE TU BASE DE DATOS REAL (CONECTADA CON TU PROYECTO)
+// ==========================================================================
+const firebaseConfig = {
+    apiKey: "AIzaSyDoOHH2r6kUVn3k-LBE2SkRj6g08Uuc_UI",
+    authDomain: "malaga-turistica.firebaseapp.com",
+    databaseURL: "https://malaga-turistica-default-rtdb.europe-west1.firebasedatabase.app", // Enlace directo a tu servidor de Europa
+    projectId: "malaga-turistica",
+    storageBucket: "malaga-turistica.firebasestorage.app",
+    messagingSenderId: "871403346309",
+    appId: "1:871403346309:web:2ac53f7a7f05301f610cec",
+    measurementId: "G-7M8YT97RLC"
+};
+
+// Inicializamos los servicios de Firebase de forma global
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// ==========================================================================
+// 2. INTERACTIVIDAD DE LOS CALENDARIOS
+// ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
 
-    // --- VARIABLES GLOBALES DE ADMINISTRACIÓN (ACCESO ÚNICO) ---
     let esAdmin = false; 
-    const CONTRASENA_SECRETA = "1234"; // Contraseña para el modo edición
+    const CONTRASENA_SECRETA = "1234"; // Tu clave para editar
 
     const adminStatus = document.getElementById('admin-status');
     const btnLogin = document.getElementById('btn-login');
+    const btnSave = document.getElementById('btn-save'); 
 
-    // ARRAY GLOBAL CENTRALIZADO: Guarda los calendarios para poder refrescarlos
     const listaCalendarios = []; 
+    let DB_RESERVAS = {}; 
 
-    // BASE DE DATOS DE FECHAS OCUPADAS (Formato 'AAAA-MM-DD')
-    const DB_RESERVAS = {
-        "cal-apartamento1": ["2026-05-08", "2026-05-15", "2026-05-16"], // Torrox
-        "cal-apartamento2": ["2026-05-22", "2026-05-23"]               // Rincón
-    };
-
-    // --- CLASE OBJETO PARA LA CREACIÓN DE CALENDARIOS INDEPENDIENTES ---
     class Calendario {
         constructor(containerId) {
             this.containerId = containerId;
             this.container = document.getElementById(containerId);
-            
-            // Si el contenedor no existe en el HTML actual, detenemos la ejecución para evitar errores
             if (!this.container) return; 
 
-            // SELECTORES EXACTOS ADAPTADOS A TU HTML
             this.monthYearText = this.container.querySelector('.month-year');
             this.calendarDaysContainer = this.container.querySelector('.calendar-days');
             this.prevBtn = this.container.querySelector('.prev-month');
@@ -37,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
             ];
 
-            // Configurar los botones de navegación de meses con control de existencia
             if (this.prevBtn) {
                 this.prevBtn.onclick = (e) => {
                     e.preventDefault();
@@ -54,28 +64,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 };
             }
 
-            // Registrar automáticamente esta instancia en el array de control global
             listaCalendarios.push(this);
-
-            // Dibujar por primera vez el calendario en pantalla
-            this.renderCalendar();
         }
 
-        // Generar formato estándar de fecha 'AAAA-MM-DD' sin desfases horarios
         formatearFecha(year, month, day) {
             const m = String(month + 1).padStart(2, '0');
             const d = String(day).padStart(2, '0');
             return `${year}-${m}-${d}`;
         }
 
-        // Método principal para pintar la cuadrícula del mes actual
         renderCalendar() {
             if (!this.calendarDaysContainer || !this.monthYearText) return;
 
             const year = this.currentDate.getFullYear();
             const month = this.currentDate.getMonth();
 
-            // Calcular desfase del primer día de la semana (Lunes a Domingo)
             const firstDayIndex = new Date(year, month, 1).getDay();
             const startOffset = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
             const totalDays = new Date(year, month + 1, 0).getDate();
@@ -83,14 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
             this.monthYearText.textContent = `${this.months[month]} ${year}`;
             this.calendarDaysContainer.innerHTML = '';
 
-            // 1. Generar los espacios vacíos correspondientes al inicio del mes
             for (let i = 0; i < startOffset; i++) {
                 const emptyDiv = document.createElement('div');
                 emptyDiv.classList.add('empty');
                 this.calendarDaysContainer.appendChild(emptyDiv);
             }
 
-            // 2. Generar e interactuar con los días numéricos del mes
             for (let day = 1; day <= totalDays; day++) {
                 const dayDiv = document.createElement('div');
                 dayDiv.textContent = day;
@@ -98,35 +99,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const fechaString = this.formatearFecha(year, month, day);
 
-                // COMPROBACIÓN DINÁMICA: Consultamos si la fecha está reservada
                 if (DB_RESERVAS[this.containerId] && DB_RESERVAS[this.containerId].includes(fechaString)) {
-                    dayDiv.classList.add('busy'); // Aplica la clase del tachado rojo
+                    dayDiv.classList.add('busy'); 
                 } else {
-                    dayDiv.classList.add('available'); // Día libre estándar
+                    dayDiv.classList.add('available'); 
                 }
 
-                // Cambiar el diseño del puntero del ratón en función del rol de administración
                 dayDiv.style.cursor = esAdmin ? "pointer" : "default";
 
-                // EVENTO INTERACTIVO: Control de marcas de reserva en tiempo real al hacer clic
                 dayDiv.addEventListener('click', () => {
-                    if (!esAdmin) return; // Si eres un cliente (Solo Lectura), se bloquea la acción
+                    if (!esAdmin) return; 
 
-                    // Inicializar el array del alojamiento si estuviera corrupto o vacío
                     if (!DB_RESERVAS[this.containerId]) {
                         DB_RESERVAS[this.containerId] = [];
                     }
 
-                    // Si ya estaba bloqueado lo quitamos, si estaba libre lo añadimos
                     if (DB_RESERVAS[this.containerId].includes(fechaString)) {
                         DB_RESERVAS[this.containerId] = DB_RESERVAS[this.containerId].filter(f => f !== fechaString);
                     } else {
                         DB_RESERVAS[this.containerId].push(fechaString);
                     }
 
-                    // ACTUALIZACIÓN INMEDIATA: Volvemos a pintar este calendario para refrescar el HTML
-                    this.renderCalendar();
-                    console.log(`Reservas actuales de [${this.containerId}]:`, DB_RESERVAS[this.containerId]);
+                    this.renderCalendar(); 
                 });
 
                 this.calendarDaysContainer.appendChild(dayDiv);
@@ -134,11 +128,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- INICIALIZACIÓN AUTOMÁTICA DE TUS DOS APARTAMENTOS ---
-    new Calendario('cal-apartamento1');
-    new Calendario('cal-apartamento2');
+    // ==========================================================================
+    // 3. DESCARGA AUTOMÁTICA EN TIEMPO REAL DESDE LA NUBE
+    // ==========================================================================
+    database.ref('reservas_malaga').once('value').then((snapshot) => {
+        const datosEnLaNube = snapshot.val();
+        if (datosEnLaNube) {
+            DB_RESERVAS = datosEnLaNube;
+        } else {
+            DB_RESERVAS = { "cal-apartamento1": [], "cal-apartamento2": [] };
+        }
+        
+        new Calendario('cal-apartamento1');
+        new Calendario('cal-apartamento2');
+        listaCalendarios.forEach(cal => cal.renderCalendar());
+    }).catch((error) => {
+        console.error("Error conectando a internet: ", error);
+        new Calendario('cal-apartamento1');
+        new Calendario('cal-apartamento2');
+        listaCalendarios.forEach(cal => cal.renderCalendar());
+    });
 
-    // --- LOGICA DEL BOTÓN DE LOGIN COMPARTIDO ---
+    // ==========================================================================
+    // 4. INICIO DE SESIÓN DE ADMINISTRADOR Y GUARDADO SÍNCRONO
+    // ==========================================================================
     if (btnLogin) {
         btnLogin.addEventListener('click', () => {
             if (!esAdmin) {
@@ -150,8 +163,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         adminStatus.style.color = "#2e7d32";
                     }
                     btnLogin.textContent = "Cerrar Sesión";
+                    if (btnSave) btnSave.style.display = "inline-block"; 
                 } else {
-                    alert("Contraseña incorrecta. Acceso denegado.");
+                    alert("Contraseña incorrecta.");
                 }
             } else {
                 esAdmin = false;
@@ -160,10 +174,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     adminStatus.style.color = "black";
                 }
                 btnLogin.textContent = "Acceso Admin";
+                if (btnSave) btnSave.style.display = "none"; 
             }
-            
-            // Forzamos un redibujado de todos los calendarios guardados en el array al cambiar de rol
             listaCalendarios.forEach(instanciaCal => instanciaCal.renderCalendar());
+        });
+    }
+
+    if (btnSave) {
+        btnSave.addEventListener('click', () => {
+            database.ref('reservas_malaga').set(DB_RESERVAS)
+                .then(() => {
+                    alert("💾 ¡Perfecto! Fechas actualizadas globalmente en internet.");
+                })
+                .catch((error) => {
+                    alert("Error al subir los datos: " + error.message);
+                });
         });
     }
 });
