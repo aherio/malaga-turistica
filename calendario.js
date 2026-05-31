@@ -1,13 +1,9 @@
 // ==========================================================================
 // 1. CONFIGURACIÓN DE TU BASE DE DATOS REAL (CONECTADA CON TU PROYECTO)
 // ==========================================================================
-// ==========================================================================
-// 1. CONFIGURACIÓN DE TU BASE DE DATOS REAL
-// ==========================================================================
 const firebaseConfig = {
     apiKey: "AIzaSyDoOHH2r6kUVn3k-LBE2SkRj6g08Uuc_UI",
     authDomain: "malaga-turistica.firebaseapp.com",
-    // REVISA ESTA LÍNEA: Debe ser exactamente este enlace para el servidor de Europa
     databaseURL: "https://malaga-turistica-default-rtdb.europe-west1.firebasedatabase.app/", 
     projectId: "malaga-turistica",
     storageBucket: "malaga-turistica.firebasestorage.app",
@@ -16,14 +12,14 @@ const firebaseConfig = {
     measurementId: "G-7M8YT97RLC"
 };
 
-// Inicializamos Firebase
+// Inicializamos Firebase de forma segura
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const database = firebase.database();
 
 // ==========================================================================
-// 2. INTERACTIVIDAD DE LOS CALENDARIOS
+// 2. INTERACTIVIDAD DE LOS CALENDARIOS (LÓGICA INTERNA)
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -186,70 +182,25 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // BOTÓN VERDE "GUARDAR CAMBIOS" REFORZADO
+    // BOTÓN VERDE "GUARDAR CAMBIOS" UNIFICADO Y ANTI-NULL
     if (btnSave) {
         btnSave.addEventListener('click', () => {
             
-            // SEGURIDAD: Si DB_RESERVAS está vacío o es null por culpa del inicio, 
-            // nos aseguramos de que tenga estructura antes de subirlo a internet
+            // Si la base de datos de internet venía vacía (null), forzamos la estructura inicial
             if (!DB_RESERVAS || Object.keys(DB_RESERVAS).length === 0) {
                 DB_RESERVAS = {
-                    "cal-apartamento1": DB_RESERVAS["cal-apartamento1"] || [],
-                    "cal-apartamento2": DB_RESERVAS["cal-apartamento2"] || []
+                    "cal-apartamento1": [],
+                    "cal-apartamento2": []
                 };
             }
 
-            // Subimos los datos a la nube de Firebase
+            // Subimos los datos limpios a Firebase
             database.ref('reservas_malaga').set(DB_RESERVAS)
                 .then(() => {
-                    alert("💾 ¡Perfecto! Fechas sincronizadas en internet con éxito. Ese 'null' de tu pantalla desaparecerá.");
+                    alert("💾 ¡Perfecto! Fechas sincronizadas en internet con éxito. El bloqueo ha terminado.");
                 })
                 .catch((error) => {
                     alert("Error crítico al subir a Firebase: " + error.message);
-                });
-        });
-    }
-
-    
-    // ==========================================================================
-    // 4. INICIO DE SESIÓN DE ADMINISTRADOR Y GUARDADO SÍNCRONO
-    // ==========================================================================
-    if (btnLogin) {
-        btnLogin.addEventListener('click', () => {
-            if (!esAdmin) {
-                const intento = prompt("Introduce la contraseña de administrador:");
-                if (intento === CONTRASENA_SECRETA) {
-                    esAdmin = true;
-                    if (adminStatus) {
-                        adminStatus.textContent = "Modo: 🔐 Administrador (Modo Edición)";
-                        adminStatus.style.color = "#2e7d32";
-                    }
-                    btnLogin.textContent = "Cerrar Sesión";
-                    if (btnSave) btnSave.style.display = "inline-block"; 
-                } else {
-                    alert("Contraseña incorrecta.");
-                }
-            } else {
-                esAdmin = false;
-                if (adminStatus) {
-                    adminStatus.textContent = "Modo: 👤 Cliente (Solo Lectura)";
-                    adminStatus.style.color = "black";
-                }
-                btnLogin.textContent = "Acceso Admin";
-                if (btnSave) btnSave.style.display = "none"; 
-            }
-            listaCalendarios.forEach(instanciaCal => instanciaCal.renderCalendar());
-        });
-    }
-
-    if (btnSave) {
-        btnSave.addEventListener('click', () => {
-            database.ref('reservas_malaga').set(DB_RESERVAS)
-                .then(() => {
-                    alert("💾 ¡Perfecto! Fechas actualizadas globalmente en internet.");
-                })
-                .catch((error) => {
-                    alert("Error al subir los datos: " + error.message);
                 });
         });
     }
